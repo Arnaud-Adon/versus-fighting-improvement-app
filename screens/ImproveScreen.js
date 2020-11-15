@@ -1,12 +1,11 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import Signup from "../components/Signup";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function LoginScreen() {
+export default function ImproveScreen() {
   const { container } = styles;
   return (
     <View style={container}>
-      <Signup />
+      <Text>Improve screen</Text>
     </View>
   );
 }
