@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
+import { AsyncStorageStatic } from "react-native";
 
 export const prefix = Platform.OS === "ios" ? "ios" : "md";
 
