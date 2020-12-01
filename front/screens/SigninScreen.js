@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { StyleSheet, Dimensions, ScrollView, Text, View } from "react-native";
 import { useForm, Controller } from "react-hook-form";
@@ -7,8 +7,15 @@ import GoogleAuthForm from "../components/GoogleAuthForm";
 
 const { width } = Dimensions.get("window");
 
-const SigninScreen = (props) => {
+const SigninScreen = ({ isLogged, navigation }) => {
   const { container, titleStyle } = styles;
+
+  useEffect(() => {
+    if (isLogged) {
+      navigation.navigate("Improve");
+    }
+  });
+
   return (
     <View style={container}>
       <Text style={titleStyle}>Connexion</Text>
@@ -18,7 +25,13 @@ const SigninScreen = (props) => {
   );
 };
 
-export default SigninScreen;
+const mapStateToProps = (state) => {
+  return {
+    isLogged: state.authentification.isLogged,
+  };
+};
+
+export default connect(mapStateToProps, undefined)(SigninScreen);
 
 const styles = StyleSheet.create({
   container: {

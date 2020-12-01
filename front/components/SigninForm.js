@@ -9,17 +9,19 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useForm, Controller } from "react-hook-form";
+import { signinUser } from "../actions";
 
 const { width } = Dimensions.get("window");
 
 const SigninForm = (props) => {
+  console.log("props SigninForm", props);
   const { control, handleSubmit, errors } = useForm();
   const { container, inputStyle, buttonStyle, errorInput } = styles;
   const { signinUser } = props;
 
   const onSubmit = (data) => {
     console.log("data signin", data);
-    signinUser(data);
+    // signinUser(data);
   };
 
   return (
@@ -66,7 +68,11 @@ const SigninForm = (props) => {
   );
 };
 
-export default connect(null, null)(SigninForm);
+const mapDispatchToProps = {
+  signinUser,
+};
+
+export default connect(null, mapDispatchToProps)(SigninForm);
 
 const styles = StyleSheet.create({
   inputStyle: {

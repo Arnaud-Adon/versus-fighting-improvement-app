@@ -9,8 +9,8 @@ beforeEach(async () => {
 
 describe("<App />", () => {
   test("has 1 child", () => {
-    const tree = renderer.create(<App />).toJSON();
-    console.log("tree", tree);
+    // const tree = renderer.create(<App />).toJSON();
+    // console.log("tree", tree);
     // expect(tree.children.length).toBe(1);
     expect(true).toBeTruthy();
   });
