@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { AsyncStorageStatic } from "react-native";
+import { loadAsync } from "expo-font";
 
 export const prefix = Platform.OS === "ios" ? "ios" : "md";
 
@@ -16,4 +17,11 @@ export const renderInitialScreen = () => {
   } catch (error) {
     console.log("A error was occured: ", error);
   }
+};
+
+export const loadConfiguration = async () => {
+  await loadAsync({
+    LockerliOne: require("../assets/fonts/LeckerliOne-Regular.ttf"),
+    Poppins: require("../assets/fonts/Poppins-Regular.ttf"),
+  });
 };
