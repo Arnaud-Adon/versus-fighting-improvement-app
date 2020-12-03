@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  TouchableNativeFeedback,
 } from "react-native";
 import { Picker, PickerIOS } from "@react-native-community/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -14,6 +15,8 @@ import { countries } from "../utils/countriesList";
 import { signupUser } from "../actions";
 import { connect } from "react-redux";
 import { verifEmail, validateEqual, validateNotEmpty } from "../validations";
+import { Ionicons } from "@expo/vector-icons";
+import { prefix } from "../utils/helper";
 import { useForm, Controller } from "react-hook-form";
 
 const { width } = Dimensions.get("window");
@@ -27,12 +30,18 @@ const SignupScreen = (props) => {
     dateStyle,
     countryStyle,
     errorInput,
+    eyeStyle,
   } = styles;
 
   const { signupUser, goToImproveScreen, isLogged } = props;
   const { control, handleSubmit, errors } = useForm();
   const [date, setDate] = useState(new Date());
   const [country, setCountry] = useState(countries[0].name);
+  const [secure, setSecure] = useState(false);
+
+  const showPassword = () => {
+    setSecure(!secure);
+  };
 
   const onSubmit = (data) => {
     if (!data.birthdayDate) {
@@ -144,13 +153,18 @@ const SignupScreen = (props) => {
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
-              <TextInput
-                style={inputStyle}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                secureTextEntry={true}
-              />
+              <View>
+                <TextInput
+                  style={inputStyle}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  secureTextEntry={secure}
+                />
+                <TouchableNativeFeedback onPress={showPassword}>
+                  <Ionicons style={eyeStyle} name={`${prefix}-eye`} />
+                </TouchableNativeFeedback>
+              </View>
             )}
             name="password"
             rules={{ required: true }}
@@ -166,13 +180,18 @@ const SignupScreen = (props) => {
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
-              <TextInput
-                style={inputStyle}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                secureTextEntry={true}
-              />
+              <View>
+                <TextInput
+                  style={inputStyle}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  secureTextEntry={secure}
+                />
+                <TouchableNativeFeedback onPress={showPassword}>
+                  <Ionicons style={eyeStyle} name={`${prefix}-eye`} />
+                </TouchableNativeFeedback>
+              </View>
             )}
             name="confirmPassword"
             rules={{ required: true }}
@@ -209,7 +228,6 @@ export default SignupScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
@@ -245,5 +263,11 @@ const styles = StyleSheet.create({
   },
   errorInput: {
     color: "red",
+  },
+  eyeStyle: {
+    position: "absolute",
+    fontSize: 24,
+    top: 5,
+    right: 10,
   },
 });

@@ -7,16 +7,26 @@ import {
   Text,
   Dimensions,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import {
+  TextInput,
+  TouchableNativeFeedback,
+} from "react-native-gesture-handler";
 import { useForm, Controller } from "react-hook-form";
+import { Ionicons } from "@expo/vector-icons";
+import { prefix } from "../utils/helper";
 import { signinUser } from "../actions";
 
 const { width } = Dimensions.get("window");
 
 const SigninForm = (props) => {
   const { control, handleSubmit, errors } = useForm();
-  const { container, inputStyle, buttonStyle, errorInput } = styles;
+  const { container, inputStyle, buttonStyle, errorInput, eyeStyle } = styles;
   const { signinUser } = props;
+  const [secure, setSecure] = useState(true);
+
+  const showPassword = () => {
+    setSecure(!secure);
+  };
 
   const onSubmit = (data) => {
     console.log("SigninForm data", data);
@@ -45,13 +55,18 @@ const SigninForm = (props) => {
       <Controller
         control={control}
         render={({ onChange, onBlur, value }) => (
-          <TextInput
-            style={inputStyle}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            secureTextEntry={true}
-            value={value}
-          />
+          <View>
+            <TextInput
+              style={inputStyle}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              secureTextEntry={secure}
+              value={value}
+            />
+            <TouchableNativeFeedback onPress={showPassword}>
+              <Ionicons style={eyeStyle} name={`${prefix}-eye`} />
+            </TouchableNativeFeedback>
+          </View>
         )}
         name="password"
         rules={{ required: true }}
@@ -91,5 +106,12 @@ const styles = StyleSheet.create({
   },
   errorInput: {
     color: "red",
+  },
+  eyeStyle: {
+    position: "absolute",
+    top: 15,
+    right: 20,
+    fontSize: 26,
+    color: "black",
   },
 });
