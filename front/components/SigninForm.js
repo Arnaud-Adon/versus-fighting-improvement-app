@@ -14,13 +14,12 @@ import { signinUser } from "../actions";
 const { width } = Dimensions.get("window");
 
 const SigninForm = (props) => {
-  console.log("props SigninForm", props);
   const { control, handleSubmit, errors } = useForm();
   const { container, inputStyle, buttonStyle, errorInput } = styles;
   const { signinUser } = props;
 
   const onSubmit = (data) => {
-    console.log("data signin", data);
+    console.log("SigninForm data", data);
     // signinUser(data);
   };
 
@@ -50,6 +49,7 @@ const SigninForm = (props) => {
             style={inputStyle}
             onBlur={onBlur}
             onChangeText={onChange}
+            secureTextEntry={true}
             value={value}
           />
         )}

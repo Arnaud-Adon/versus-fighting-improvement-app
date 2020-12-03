@@ -45,12 +45,6 @@ const SignupScreen = (props) => {
     signupUser(data);
   };
 
-  //   useEffect(() => {
-  //     if (isLogged) {
-  //       goToImproveScreen();
-  //     }
-  //   });
-
   return (
     <ScrollView>
       <View style={container}>
@@ -215,7 +209,7 @@ export default SignupScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 100,
+    marginTop: 50,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",

@@ -1,11 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { connect } from "react-redux";
 
 const Error = (props) => {
   return (
     <View>
-      <Text>{props.error}</Text>
+      <Alert>{props.error}</Alert>
     </View>
   );
 };

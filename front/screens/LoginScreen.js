@@ -10,7 +10,6 @@ import {
 const { width } = Dimensions.get("window");
 
 export default function LoginScreen({ navigation }) {
-  console.log(navigation);
   const {
     container,
     blocTitle,
