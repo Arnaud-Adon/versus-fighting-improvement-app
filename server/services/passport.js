@@ -1,12 +1,11 @@
-const passport = require("passport"),
-  LocalStrategy = require("passport-local");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 const UserModel = require("../models/user");
 const User = require("../models/user");
-const passwordHelper = require("../helper/password");
 
 passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne({ username: username }, (error, user) => {
+  new LocalStrategy(function (username, password, done) {
+    User.findOne({ username: username }, function (error, user) {
       if (error) {
         return done(error);
       }
@@ -14,12 +13,16 @@ passport.use(
         return done(null, false, { message: "Le pseudo n'est pas correcte" });
       }
       user.isEqual(password, function (err, same) {
-        if (err) return done(err);
-        if (!same)
+        if (err) {
+          return done(err);
+        }
+        if (!same) {
           return done(null, false, {
             message: "Le mot de passe est incorrecte",
           });
-        return done(null, user);
+        } else {
+          return done(null, user);
+        }
       });
     });
   })

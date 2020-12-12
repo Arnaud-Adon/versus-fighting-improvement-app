@@ -15,6 +15,7 @@ import SigninScreen from "./screens/SigninScreen";
 import SettingScreen from "./screens/SettingScreen";
 import { renderInitialScreen, loadConfiguration } from "./utils/helper";
 import Loading from "./components/Loading";
+import SelectCharacterScreen from "./screens/SelectCharacterScreen";
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
@@ -23,10 +24,12 @@ const Stack = createStackNavigator();
 const ImproveTabs = createBottomTabNavigator();
 
 const ImproveTabsScreen = () => {
-  <ImproveTabs.Navigator>
-    <ImproveTabs.Screen name="Improve" component={ImproveScreen} />
-    <ImproveTabs.Screen name="Setting" component={SettingScreen} />
-  </ImproveTabs.Navigator>;
+  return (
+    <ImproveTabs.Navigator>
+      <ImproveTabs.Screen name="Improve" component={ImproveScreen} />
+      <ImproveTabs.Screen name="Setting" component={SettingScreen} />
+    </ImproveTabs.Navigator>
+  );
 };
 
 export default function App() {
@@ -82,6 +85,10 @@ export default function App() {
                   headerTitle: false,
                 };
               }}
+            />
+            <Stack.Screen
+              name="SelectCharacter"
+              component={SelectCharacterScreen}
             />
             <Stack.Screen name="Improve" component={ImproveTabsScreen} />
           </Stack.Navigator>

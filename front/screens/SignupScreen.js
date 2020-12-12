@@ -21,7 +21,7 @@ import { useForm, Controller } from "react-hook-form";
 
 const { width } = Dimensions.get("window");
 
-const SignupScreen = (props) => {
+const SignupScreen = ({ signupUser, isLogged }) => {
   const {
     container,
     title,
@@ -33,11 +33,16 @@ const SignupScreen = (props) => {
     eyeStyle,
   } = styles;
 
-  const { signupUser, goToImproveScreen, isLogged } = props;
   const { control, handleSubmit, errors } = useForm();
   const [date, setDate] = useState(new Date());
   const [country, setCountry] = useState(countries[0].name);
-  const [secure, setSecure] = useState(false);
+  const [secure, setSecure] = useState(true);
+
+  useEffect(() => {
+    if (isLogged) {
+      navigation.navigate("SelectCharacter");
+    }
+  });
 
   const showPassword = () => {
     setSecure(!secure);
@@ -50,7 +55,6 @@ const SignupScreen = (props) => {
     if (!data.country) {
       data.country = country;
     }
-    console.log("data", data);
     signupUser(data);
   };
 
@@ -157,9 +161,9 @@ const SignupScreen = (props) => {
                 <TextInput
                   style={inputStyle}
                   onBlur={onBlur}
-                  onChangeText={(value) => onChange(value)}
-                  value={value}
+                  onChangeText={onChange}
                   secureTextEntry={secure}
+                  value={value}
                 />
                 <TouchableNativeFeedback onPress={showPassword}>
                   <Ionicons style={eyeStyle} name={`${prefix}-eye`} />
@@ -184,9 +188,9 @@ const SignupScreen = (props) => {
                 <TextInput
                   style={inputStyle}
                   onBlur={onBlur}
-                  onChangeText={(value) => onChange(value)}
-                  value={value}
+                  onChangeText={onChange}
                   secureTextEntry={secure}
+                  value={value}
                 />
                 <TouchableNativeFeedback onPress={showPassword}>
                   <Ionicons style={eyeStyle} name={`${prefix}-eye`} />
@@ -222,8 +226,8 @@ const mapDispatchToProps = {
   signupUser,
 };
 
-// export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
-export default SignupScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
+// export default SignupScreen;
 
 const styles = StyleSheet.create({
   container: {

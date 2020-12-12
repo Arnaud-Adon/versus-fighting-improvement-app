@@ -21,7 +21,20 @@ export const signinUser = (data) => async (dispatch) => {
     .then((response) => {
       console.log("response", response.data.token);
       AsyncStorage.setItem("token", response.data.token);
-      dispatch({ type: types.SIGN_IN, payload: true });
+      dispatch({ type: types.SIGN_UP, payload: true });
+    })
+    .catch((error) => console.log("a error was occured", error));
+};
+
+export const getCharacters = () => async (dispatch) => {
+  console.log("getCharacters");
+  const GET_CHARACTER_URL = `${SERVER_URL}/characters`;
+  await Axios.get(GET_CHARACTER_URL)
+    .then((response) => {
+      dispatch({
+        type: types.GET_CHARACTERS,
+        payload: response.data.characters,
+      });
     })
     .catch((error) => console.log("a error was occured", error));
 };

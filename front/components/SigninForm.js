@@ -30,11 +30,12 @@ const SigninForm = (props) => {
 
   const onSubmit = (data) => {
     console.log("SigninForm data", data);
-    // signinUser(data);
+    signinUser(data);
   };
 
   return (
     <View style={container}>
+      <Text>Pseudo:</Text>
       <Controller
         control={control}
         render={({ onChange, onBlur, value }) => (
@@ -52,6 +53,7 @@ const SigninForm = (props) => {
       {errors.username && (
         <Text style={errorInput}>Votre pseudo est requis.</Text>
       )}
+      <Text>Mot de passe:</Text>
       <Controller
         control={control}
         render={({ onChange, onBlur, value }) => (
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
     textAlign: "center",
     lineHeight: 30,
+    color: "#fff",
   },
   errorInput: {
     color: "red",

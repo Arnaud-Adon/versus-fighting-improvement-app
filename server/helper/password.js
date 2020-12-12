@@ -5,12 +5,12 @@ exports.hashPassword = function (user, next) {
   bcrypt.genSalt(saltRounds, function (err, salt) {
     if (err) {
       console.log("Cannot generated salt");
-      next(err);
+      return next(err);
     }
-    bcrypt.hash(user.password, salt, function (err, hash) {
+    bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) {
         console.log("Cannot hashed password");
-        next(err);
+        return next(err);
       }
       user.password = hash;
       next();
@@ -18,8 +18,11 @@ exports.hashPassword = function (user, next) {
   });
 };
 
-exports.comparePassword = function (externalPassword, userPassword, done) {
-  bcrypt.compare(externalPassword, userPassword, function (err, same) {
+exports.comparePassword = (externalPassword, userPassword, done) => {
+  console.log("externalPassword", externalPassword);
+  console.log("userPassword", userPassword);
+  bcrypt.compare(externalPassword, userPassword, (err, same) => {
+    console.log("comparePassword", same);
     if (err) {
       return done(err);
     }

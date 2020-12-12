@@ -21,11 +21,11 @@ UserSchema.pre("save", function (next) {
   passwordHelper.hashPassword(user, next);
 });
 
-const UserModel = model("user", UserSchema);
-
 UserSchema.methods.isEqual = function (password, done) {
   const user = this;
   passwordHelper.comparePassword(password, user.password, done);
 };
+
+const UserModel = model("user", UserSchema);
 
 module.exports = UserModel;

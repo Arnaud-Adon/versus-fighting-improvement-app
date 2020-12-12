@@ -13,11 +13,10 @@ app.use(bodyParser.json({ type: "*/*" }));
 connexion();
 
 app.use(cors());
-app.use(morgan("tiny"));
+app.use(morgan("combined"));
 
-routes(app);
 const server = http.createServer(app);
-
+routes(app);
 server.listen(config.port, function () {
   console.log(`Server listen on port ${config.port}`);
 });

@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { StyleSheet, Dimensions, ScrollView, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import SigninForm from "../components/SigninForm";
 import GoogleAuthForm from "../components/GoogleAuthForm";
-
-const { width } = Dimensions.get("window");
 
 const SigninScreen = ({ isLogged, navigation }) => {
   const { container, titleStyle } = styles;
 
   useEffect(() => {
     if (isLogged) {
-      navigation.navigate("Improve");
+      navigation.navigate("SelectCharacter");
     }
   });
 

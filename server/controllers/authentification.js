@@ -3,6 +3,7 @@ const jwt = require("jwt-simple");
 const lodash = require("lodash");
 const config = require("../config");
 const passport = require("passport");
+require("../services/passport");
 
 function getTokenFromUser(user) {
   const timeStamp = new Date().getTime();
@@ -24,14 +25,13 @@ exports.signup = function (req, res, next) {
   const password = req.body.password;
   const createdAt = new Date();
 
-  User.findOne({ email: email }, function (err, existingUser) {
+  User.findOne({ username: username }, function (err, existingUser) {
     if (err) {
       return next(err);
     }
     if (existingUser) {
       return res.status(422).send({ error: "User already exist" });
     }
-    console.log("existingUser", existingUser);
     if (
       lodash.isEmpty(username) ||
       lodash.isEmpty(email) ||
@@ -62,9 +62,16 @@ exports.signup = function (req, res, next) {
 };
 
 exports.signin = function (req, res, next) {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.status(404).send(info);
-    return res.json({ token: getTokenFromUser(user) });
-  });
+  passport.authenticate("local", function (err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: "les identifiants ne sont pas correcte" });
+    } else {
+      return res.json({ token: getTokenFromUser(user) });
+    }
+  })(req, res, next);
 };
