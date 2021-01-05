@@ -9,7 +9,7 @@ function getTokenFromUser(user) {
   const timeStamp = new Date().getTime();
   return jwt.encode(
     {
-      sub: user.id,
+      sub: user._id,
       iat: timeStamp,
     },
     config.jwtKey
@@ -17,7 +17,6 @@ function getTokenFromUser(user) {
 }
 
 exports.signup = function (req, res, next) {
-  //   console.log("req.body", req.body);
   const username = req.body.username;
   const email = req.body.email;
   const birthdayDate = req.body.birthdayDate;
@@ -30,7 +29,7 @@ exports.signup = function (req, res, next) {
       return next(err);
     }
     if (existingUser) {
-      return res.status(422).send({ error: "User already exist" });
+      return res.status(422).send({ message: "L'utilisateur existe déjà" });
     }
     if (
       lodash.isEmpty(username) ||
@@ -39,7 +38,7 @@ exports.signup = function (req, res, next) {
       lodash.isEmpty(country) ||
       lodash.isEmpty(password)
     ) {
-      return res.status(422).send({ error: "Data from create user is empty" });
+      return res.status(422).send({ message: "L'une des donnée est vide" });
     } else {
       const user = new User({
         username: username,
@@ -54,7 +53,7 @@ exports.signup = function (req, res, next) {
         if (err) {
           return next(err);
         } else {
-          return res.json({ token: getTokenFromUser(user) });
+          return res.json({ user: user, token: getTokenFromUser(user) });
         }
       });
     }
@@ -69,9 +68,42 @@ exports.signin = function (req, res, next) {
     if (!user) {
       return res
         .status(404)
-        .send({ message: "les identifiants ne sont pas correcte" });
+        .send({ message: "les identifiants ne sont pas correctes" });
     } else {
-      return res.json({ token: getTokenFromUser(user) });
+      User.updateOne(
+        { username: user.username },
+        { lastConnexion: new Date() },
+        {},
+        function (err, updateUser) {
+          if (err) {
+            return next(err);
+          }
+          if (updateUser) {
+            User.findOne(
+              { username: user.username },
+              function (err, modifiedUser) {
+                if (err) {
+                  return next(err);
+                }
+                if (modifiedUser) {
+                  return res.json({
+                    user: modifiedUser,
+                    token: getTokenFromUser(modifiedUser),
+                  });
+                } else {
+                  return res
+                    .status(404)
+                    .send({ message: "cannot found user modified" });
+                }
+              }
+            );
+          } else {
+            return res
+              .status(404)
+              .send({ message: "cannot update lastConnexion for user" });
+          }
+        }
+      );
     }
   })(req, res, next);
 };

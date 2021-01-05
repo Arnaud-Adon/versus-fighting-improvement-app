@@ -5,22 +5,21 @@ import Skill from "../components/Skill";
 import Star from "../components/Star";
 
 describe("Component Skill", () => {
-  beforeEach(() => {
-    AsyncStorage.clear();
-  });
+  const skillsMock = {
+    power: 3,
+    health: 3,
+    mobility: 4,
+    technical: 2,
+    scope: 3,
+  };
 
-  test("Le composant Skill est bien rendu", async () => {
+  test("Should return five component Star", async () => {
     //Arrange
-    const { toJSON } = render(<Skill />);
+    const { toJSON } = render(<Skill skills={skillsMock} />);
+
     //Assert
-    await waitFor(() => expect(toJSON()).toMatchSnapshot());
-  });
-
-  test("renderSkillsCharacter should contain 5 component <star/>", async () => {
-    const { queryByTestId } = render(<Star />);
-
-    await waitFor(() => {
-      expect(queryByTestId("renderSkillsCharacter").props.children).toEqual(5);
-    });
+    await waitFor(() =>
+      expect(toJSON().children[0].children.length).toEqual(5)
+    );
   });
 });

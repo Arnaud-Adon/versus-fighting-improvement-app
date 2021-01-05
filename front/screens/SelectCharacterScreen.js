@@ -9,16 +9,24 @@ import {
 } from "react-native";
 import CharacterList from "../components/CharacterList";
 import Skill from "../components/Skill";
+import { addCharacter } from "../actions";
+import PropTypes from "prop-types";
 
 const { width } = Dimensions.get("window");
 
-const SelectCharacterScreen = ({ characters }) => {
+const SelectCharacterScreen = ({
+  characters,
+  user,
+  addCharacter,
+  navigation,
+}) => {
   const { container, titleStyle, buttonStyle } = styles;
-  const [skills, setSkills] = useState("");
   const [caracterId, setCharacterId] = useState(null);
+  const [skills, setSkills] = useState("");
 
   useEffect(() => {
-    if (characters.length > 0 && skills === "") {
+    if (characters.length > 0 && !caracterId && !skills) {
+      setCharacterId(characters[0]._id);
       setSkills(characters[0].skills);
     }
   }, [characters]);
@@ -29,14 +37,12 @@ const SelectCharacterScreen = ({ characters }) => {
   };
 
   const submitCharacter = () => {
-    registerCharacter(caracterId);
+    addCharacter(user._id, caracterId);
   };
 
   return (
     <View style={container}>
-      <Text style={titleStyle} testID="selectCharacterTitle">
-        Veuillez sélectionner votre personnage
-      </Text>
+      <Text style={titleStyle}>Veuillez sélectionner votre personnage</Text>
       <CharacterList getSkills={getSkills} />
       <Skill skills={skills} />
       <TouchableOpacity onPress={submitCharacter}>
@@ -49,10 +55,24 @@ const SelectCharacterScreen = ({ characters }) => {
 const mapStateToProps = (state) => {
   return {
     characters: state.characters.charactersList,
+    user: state.user.informations,
   };
 };
 
-export default connect(mapStateToProps, undefined)(SelectCharacterScreen);
+const mapDispatchToProps = {
+  addCharacter,
+};
+
+SelectCharacterScreen.propTypes = {
+  characters: PropTypes.array.isRequired,
+  user: PropTypes.object.isRequired,
+  navigation: PropTypes.object.isRequired,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectCharacterScreen);
 
 const styles = StyleSheet.create({
   container: {

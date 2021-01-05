@@ -3,12 +3,12 @@ import { StyleSheet, View, Image, Text } from "react-native";
 import { renderImageRequire } from "../utils/RequireImageList";
 
 const Character = ({ name }) => {
-  const { container, imageStyle } = styles;
+  const { container, imageStyle, textStyle } = styles;
 
   return (
     <View style={container}>
       <Image style={imageStyle} source={renderImageRequire(name)} />
-      <Text>{name}</Text>
+      <Text style={textStyle}>{name}</Text>
     </View>
   );
 };
@@ -23,5 +23,10 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderWidth: 1,
+    backgroundColor: "#fff",
+  },
+  textStyle: {
+    fontWeight: "600",
+    textAlign: "center",
   },
 });

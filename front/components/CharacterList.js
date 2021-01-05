@@ -8,7 +8,6 @@ import Character from "./Character";
 const { width } = Dimensions.get("window");
 
 const CharacterList = ({ getSkills, getCharacters, characters }) => {
-  console.log("characters", characters);
   const { container, nameCharacterStyle } = styles;
   const [nameCharacter, setNameCharacter] = useState("");
 
@@ -30,7 +29,6 @@ const CharacterList = ({ getSkills, getCharacters, characters }) => {
   return (
     <View>
       <FlatList
-        testID="flatlistCharacter"
         data={characters}
         horizontal={true}
         renderItem={({ item }) => (

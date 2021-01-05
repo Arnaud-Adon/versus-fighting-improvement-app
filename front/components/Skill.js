@@ -11,7 +11,7 @@ const Skill = ({ skills }) => {
     technical,
   }) => {
     return (
-      <View testID="renderSkillsCharacter">
+      <View>
         <Star title={"Puissance"} number={power} />
         <Star title={"Santé"} number={health} />
         <Star title={"Mobilité"} number={mobility} />

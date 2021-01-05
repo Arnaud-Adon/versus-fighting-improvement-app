@@ -153,6 +153,6 @@ module.exports = [
   },
   {
     name: "Seth",
-    skills: { power: 3, health: 3, mobility: 2, technical: 5, scope: 4 },
+    skills: { power: 3, health: 2, mobility: 4, technical: 3, scope: 4 },
   },
 ];

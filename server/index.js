@@ -3,17 +3,17 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const http = require("http");
 const config = require("./config");
-const connexion = require("./services/connexion");
+const databaseConnexion = require("./services/connexion");
 const routes = require("./routes");
 const cors = require("cors");
 var app = express();
 
 app.use(bodyParser.json({ type: "*/*" }));
 
-connexion();
+databaseConnexion();
 
 app.use(cors());
-app.use(morgan("combined"));
+app.use(morgan("common"));
 
 const server = http.createServer(app);
 routes(app);

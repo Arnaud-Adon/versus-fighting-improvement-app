@@ -1,4 +1,3 @@
-const { ObjectID } = require("bson");
 const monggose = require("mongoose");
 const passwordHelper = require("../helper/password");
 const Schema = monggose.Schema;
@@ -13,6 +12,7 @@ const UserSchema = new Schema({
   createdAt: { type: Date, default: new Date() },
   lastConnexion: { type: Date, default: null },
   imageId: { type: Number, default: null },
+  characters: { type: Array, default: [] },
 });
 
 UserSchema.pre("save", function (next) {

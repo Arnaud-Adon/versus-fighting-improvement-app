@@ -11,7 +11,7 @@ const Star = ({ title, number }) => {
     switch (number) {
       case 1:
         return (
-          <View testID="renderStars" style={starContainer}>
+          <View style={starContainer}>
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star-outline`} style={starStyle} />
             <Ionicons name={`${prefix}-star-outline`} style={starStyle} />
@@ -23,7 +23,7 @@ const Star = ({ title, number }) => {
 
       case 2:
         return (
-          <View testID="renderStars" style={starContainer}>
+          <View style={starContainer}>
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star-outline`} style={starStyle} />
@@ -34,7 +34,7 @@ const Star = ({ title, number }) => {
         break;
       case 3:
         return (
-          <View testID="renderStars" style={starContainer}>
+          <View style={starContainer}>
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star`} style={starStyle} />
@@ -46,7 +46,7 @@ const Star = ({ title, number }) => {
 
       case 4:
         return (
-          <View testID="renderStars" style={starContainer}>
+          <View style={starContainer}>
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star`} style={starStyle} />
@@ -58,7 +58,7 @@ const Star = ({ title, number }) => {
 
       case 5:
         return (
-          <View testID="renderStars" style={starContainer}>
+          <View style={starContainer}>
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star`} style={starStyle} />
             <Ionicons name={`${prefix}-star`} style={starStyle} />

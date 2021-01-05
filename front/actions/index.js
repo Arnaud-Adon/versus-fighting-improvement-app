@@ -1,34 +1,45 @@
 import * as types from "../constants/ActionTypes";
 import Axios from "axios";
 import { SERVER_URL } from "../utils/helper";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as RootNavigation from "../utils/rootNavigation";
 
 export const signupUser = (data) => async (dispatch) => {
-  //Envoyer les information au server
   const SIGN_UP_URL = `${SERVER_URL}/signup`;
+
   await Axios.post(SIGN_UP_URL, data)
     .then((response) => {
-      console.log("response", response.data.token);
       AsyncStorage.setItem("token", response.data.token);
       dispatch({ type: types.SIGN_UP, payload: true });
+      dispatch({ type: types.GET_USER, payload: response.data.user });
+      RootNavigation.navigate("SelectCharacter");
     })
-    .catch((error) => console.log("a error was occured", error));
+    .catch((error) => dispatch(parseError(error.response.data.message)));
 };
 
-export const signinUser = (data) => async (dispatch) => {
+export const signinUser = (data) => (dispatch) => {
   const SIGN_IN_URL = `${SERVER_URL}/signin`;
-  await Axios.post(SIGN_IN_URL, data)
+
+  Axios.post(SIGN_IN_URL, data)
     .then((response) => {
-      console.log("response", response.data.token);
       AsyncStorage.setItem("token", response.data.token);
       dispatch({ type: types.SIGN_UP, payload: true });
+      dispatch({ type: types.GET_USER, payload: response.data.user });
+
+      if (response.data.user.characters.length > 0) {
+        RootNavigation.navigate("Improve");
+      } else {
+        RootNavigation.navigate("SelectCharacter");
+      }
     })
-    .catch((error) => console.log("a error was occured", error));
+    .catch((error) => {
+      dispatch(parseError(error.response.data.message));
+    });
 };
 
 export const getCharacters = () => async (dispatch) => {
-  console.log("getCharacters");
   const GET_CHARACTER_URL = `${SERVER_URL}/characters`;
+
   await Axios.get(GET_CHARACTER_URL)
     .then((response) => {
       dispatch({
@@ -37,4 +48,38 @@ export const getCharacters = () => async (dispatch) => {
       });
     })
     .catch((error) => console.log("a error was occured", error));
+};
+
+export const addCharacter = (userId, characterId) => async (dispatch) => {
+  const ADD_CHARACTER_URL = `${SERVER_URL}/add-character`;
+  const token = await AsyncStorage.getItem("token");
+  await Axios.post(
+    ADD_CHARACTER_URL,
+    {
+      userId,
+      characterId,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+    .then((response) => {
+      dispatch({ type: types.GET_USER, payload: response.data.user });
+      RootNavigation.navigate("Improve");
+    })
+    .catch((error) => {
+      dispatch(parseError(error.response.data.message));
+    });
+};
+
+export const logout = () => async (dispatch) => {
+  dispatch({ type: types.LOGOUT, payload: null });
+  dispatch({ type: types.SIGN_UP, payload: false });
+  await AsyncStorage.removeItem("token");
+  RootNavigation.navigate("Login");
+};
+
+export const parseError = (error) => {
+  return {
+    type: types.GET_ERROR,
+    payload: error,
+  };
 };

@@ -1,15 +1,15 @@
 import * as types from "../constants/ActionTypes";
 
 const initialState = {
-  isLogged: false,
+  message: "",
 };
 
-export const authentification = (state = initialState, action) => {
+export const error = (state = initialState, action) => {
   switch (action.type) {
-    case types.SIGN_UP:
+    case types.GET_ERROR:
       return {
         ...state,
-        isLogged: action.payload,
+        message: action.payload,
       };
       break;
     default:

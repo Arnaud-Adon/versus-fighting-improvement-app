@@ -1,15 +1,14 @@
 import { Platform } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { AsyncStorageStatic } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loadAsync } from "expo-font";
 
 export const prefix = Platform.OS === "ios" ? "ios" : "md";
 
 export const SERVER_URL = "http://localhost:3090";
 
-export const renderInitialScreen = () => {
+export const renderInitialScreen = async () => {
   try {
-    if (AsyncStorage.getItem("token")) {
+    if (await AsyncStorage.getItem("token")) {
       return "Improve";
     } else {
       return "Login";

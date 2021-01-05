@@ -1,33 +1,33 @@
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
-import AsyncStorage from "@react-native-community/async-storage";
+import { render, waitFor } from "@testing-library/react-native";
 import Star from "../components/Star";
 
-describe("Component SelectCharacter", () => {
-  beforeEach(() => {
-    AsyncStorage.clear();
-  });
-
-  test("Le composant SelectCharacter est bien rendu", async () => {
+describe("Component Star", () => {
+  test("should return number star icons define in props", async () => {
     //Arrange
-    const { toJSON } = render(<Star />);
+    const title = "Technic";
+    const starNumber = 1;
+
+    //Act
+    const { toJSON } = render(<Star number={starNumber} title={title} />);
+
     //Assert
-    await waitFor(() => expect(toJSON()).toMatchSnapshot());
-  });
-
-  test('Que la vue renderStars exist', async () => {
-    const { queryByTestId } = render(<Star />);
-
     await waitFor(() => {
-      expect(queryByTestId("renderStars")).toBeTruthy();
+      expect(toJSON().children[1].children.length).toEqual(5);
     });
   });
 
-  test('Si le résulat contient au moins 5 Ionicons de type "star-outline"', () => {
-    const { queryByTestId } = render(<Star />);
+  test("Should content title Thechnic", async () => {
+    //Arrange
+    const title = "Technic";
+    const starNumber = 5;
 
+    //Act
+    const { toJSON } = render(<Star number={starNumber} title={title} />);
+
+    //Assert
     await waitFor(() => {
-      expect(queryByTestId("renderStars").props.children).toEqual(5);
+      expect(toJSON().children[0].children[0]).toEqual(title);
     });
-  })
+  });
 });

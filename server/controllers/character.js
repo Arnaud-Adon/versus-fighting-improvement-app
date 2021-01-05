@@ -10,7 +10,6 @@ exports.getCharacters = async function (req, res, next) {
         .status(404)
         .send({ message: "Character not exist in database" });
     } else {
-      console.log("characters", characters);
       return res.send({ characters: characters });
     }
   });

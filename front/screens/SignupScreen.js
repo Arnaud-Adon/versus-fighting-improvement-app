@@ -18,10 +18,11 @@ import { verifEmail, validateEqual, validateNotEmpty } from "../validations";
 import { Ionicons } from "@expo/vector-icons";
 import { prefix } from "../utils/helper";
 import { useForm, Controller } from "react-hook-form";
+import Error from "../components/Error";
 
 const { width } = Dimensions.get("window");
 
-const SignupScreen = ({ signupUser, isLogged }) => {
+const SignupScreen = ({ signupUser, isLogged, navigation }) => {
   const {
     container,
     title,
@@ -211,6 +212,7 @@ const SignupScreen = ({ signupUser, isLogged }) => {
             Valider
           </Text>
         </TouchableOpacity>
+        <Error />
       </View>
     </ScrollView>
   );
