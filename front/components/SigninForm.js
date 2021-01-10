@@ -5,12 +5,10 @@ import {
   TouchableOpacity,
   View,
   Text,
-  Dimensions,
-} from "react-native";
-import {
   TextInput,
   TouchableNativeFeedback,
-} from "react-native-gesture-handler";
+  Dimensions,
+} from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Ionicons } from "@expo/vector-icons";
 import { prefix } from "../utils/helper";
@@ -29,7 +27,6 @@ const SigninForm = (props) => {
   };
 
   const onSubmit = (data) => {
-    console.log("SigninForm data", data);
     signinUser(data);
   };
 

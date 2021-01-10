@@ -1,6 +1,5 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import logoutImage from "../assets/images/functions/logout.png";
 import { connect } from "react-redux";
 import { logout } from "../actions";

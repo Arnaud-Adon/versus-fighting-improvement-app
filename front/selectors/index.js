@@ -22,6 +22,17 @@ export const getCharacterList = (state) => {
   return state.characters.charactersList;
 };
 
+export const getCharacterNotes = (state) => {
+  return state.note.notes;
+};
+
+export const getNoteSelected = (state) => {
+  const note = state.note.notes.filter(
+    (n) => n._id === state.note.selectedNoteId
+  );
+  return note[0];
+};
+
 // export const getUserCharacter = () => {
 //   createSelector(
 //     (state) => state.characters.charactersList,

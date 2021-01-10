@@ -83,3 +83,76 @@ export const parseError = (error) => {
     payload: error,
   };
 };
+
+export const getNote = (data) => async (dispatch) => {
+  const GET_CHARACTER_NOTE_URL = `${SERVER_URL}/get-note`;
+  const token = await AsyncStorage.getItem("token");
+
+  await Axios.post(
+    GET_CHARACTER_NOTE_URL,
+    { data },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  )
+    .then((response) => {
+      dispatch({ type: types.GET_NOTE, payload: response.data.notes });
+    })
+    .catch((error) => dispatch(parseError(error.response.data.message)));
+};
+
+export const addNote = (data) => async (dispatch) => {
+  const ADD_NOT_URL = `${SERVER_URL}/add-note`;
+  const token = await AsyncStorage.getItem("token");
+
+  await Axios.post(
+    ADD_NOT_URL,
+    { data },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  )
+    .then((response) => {
+      dispatch({ type: types.ADD_NOTE, payload: response.data.note });
+    })
+    .catch((error) => {
+      dispatch(parseError(error.response.data.message));
+    });
+};
+
+export const updateNote = (data) => async (dispatch) => {
+  const UPDATE_NOTE_URL = `${SERVER_URL}/update-note`;
+  const token = await AsyncStorage.getItem("token");
+
+  await Axios.post(
+    UPDATE_NOTE_URL,
+    { data },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+    .then((response) =>
+      dispatch({ type: types.UPDATE_NOTE, payload: response.data.note })
+    )
+    .catch((error) => dispatch(parseError(error.response.data.message)));
+};
+
+export const deleteNote = (data) => async (dispatch) => {
+  const DELETE_NOTE_URL = `${SERVER_URL}/delete-note`;
+  const token = await AsyncStorage.getItem("token");
+
+  await Axios.post(
+    DELETE_NOTE_URL,
+    { data },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+    .then((response) => {
+      dispatch({ type: types.DELETE_NOTE, payload: response.data.note });
+    })
+    .catch((error) => dispatch(parseError(error.response.data.message)));
+};
+
+export const getNoteId = (noteId) => {
+  return {
+    type: types.GET_NOTE_ID,
+    payload: noteId,
+  };
+};

@@ -38,9 +38,7 @@ passport.use(
 
 passport.use(
   new JwtStrategy(options, function (payload, done) {
-    console.log("payload", payload.sub);
     User.findOne({ _id: payload.sub }, function (err, user) {
-      console.log("user JwtStrategy", user);
       if (err) {
         return done(err, false);
       }

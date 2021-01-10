@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { View, FlatList, StyleSheet, Dimensions, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { getCharacters } from "../actions/index";
 import Character from "./Character";
 

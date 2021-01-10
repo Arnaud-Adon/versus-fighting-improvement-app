@@ -21,7 +21,7 @@ const notesMock = [
   { id: 5, text: "Note 5" },
 ];
 
-const OpponentNote = ({ getShowAddNote }) => {
+const OpponentNote = ({ notes, getShowAddNote }) => {
   const setShowAddNote = (value) => {
     getShowAddNote(value);
   };
@@ -35,16 +35,23 @@ const OpponentNote = ({ getShowAddNote }) => {
             style={styles.addIconStyle}
           />
         </TouchableOpacity>
-
         <Text>Ajouter une note</Text>
       </View>
-      <View style={styles.listStyle}>
-        <FlatList
-          data={notesMock}
-          renderItem={({ item }) => <Note text={item.text} />}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </View>
+      {notes.length > 0 ? (
+        <View style={styles.listStyle}>
+          <FlatList
+            data={notes}
+            renderItem={({ item }) => <Note id={item._id} text={item.text} />}
+            keyExtractor={(item) => item._id.toString()}
+          />
+        </View>
+      ) : (
+        <View style={styles.listStyle}>
+          <Text style={styles.textWhithoutNote}>
+            Aucune note sur cet adversaire
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -72,5 +79,9 @@ const styles = StyleSheet.create({
     width: width - 80,
     height: 220,
     borderWidth: 1,
+  },
+  textWhithoutNote: {
+    justifyContent: "center",
+    textAlign: "center",
   },
 });

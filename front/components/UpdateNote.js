@@ -1,46 +1,42 @@
-import React, { useState, useEffect } from "react";
-
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  TextInput,
   View,
-  Dimensions,
   Text,
   TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  Dimensions,
 } from "react-native";
-import { addNote } from "../actions";
+import { useSelector, useDispatch } from "react-redux";
+import { updateNote, getNoteId } from "../actions";
+import { getUserInformations } from "../selectors";
+import PropTypes from "prop-types";
 
 const { width, height } = Dimensions.get("window");
 
-const AddNote = ({
-  userId,
-  characterId,
-  opponentCharacterId,
-  getShowAddNote,
-}) => {
-  const [text, setText] = useState("");
+const UpdateNote = ({ note, getShowUpdateNoteInput }) => {
   const dispatch = useDispatch();
+  const [text, setText] = useState(note.text);
+  const user = useSelector((state) => getUserInformations(state));
 
-  const setShowAddNote = (value) => {
-    getShowAddNote(value);
+  const setShowUpdateNoteInput = (value) => {
+    dispatch(getNoteId(null));
+    getShowUpdateNoteInput(value);
   };
 
   const validateNote = () => {
     const data = {
-      userId,
-      characterId,
-      opponentCharacterId,
+      userId: user._id,
+      noteId: note._id,
       text: text,
     };
-
-    dispatch(addNote(data));
-    getShowAddNote(false);
+    dispatch(updateNote(data));
+    setShowUpdateNoteInput(false);
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => setShowAddNote(false)}>
+      <TouchableOpacity onPress={() => setShowUpdateNoteInput(false)}>
         <Text style={styles.cancelTextStyle}>Annuler</Text>
       </TouchableOpacity>
       <TextInput
@@ -51,13 +47,17 @@ const AddNote = ({
         value={text}
       />
       <TouchableOpacity onPress={() => validateNote()}>
-        <Text style={styles.validateButtonStyle}>Valider</Text>
+        <Text style={styles.validateButtonStyle}>Modifier</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default AddNote;
+UpdateNote.propTypes = {
+  getShowUpdateNoteInput: PropTypes.func.isRequired,
+};
+
+export default UpdateNote;
 
 const styles = StyleSheet.create({
   container: {

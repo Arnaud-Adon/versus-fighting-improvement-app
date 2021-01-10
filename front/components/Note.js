@@ -1,18 +1,52 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
 import { prefix } from "../utils/helper";
+import { getNoteId, deleteNote } from "../actions";
+import { getUserInformations } from "../selectors";
 
-const Note = ({ text }) => {
+const Note = ({ id, text }) => {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => getUserInformations(state));
+
+  const confirmUpdateNote = (noteId) => {
+    console.log("confirmUpdateNote id", noteId);
+    dispatch(getNoteId(noteId));
+  };
+
+  const comfirmDeleteNote = (noteId) => {
+    const data = {
+      userId: user._id,
+      noteId,
+    };
+    return Alert.alert(
+      "Voulez-vous supprimmer cette note ?",
+      null,
+      [
+        {
+          text: "Non",
+          style: "cancel",
+        },
+        {
+          text: "Oui",
+          onPress: () => dispatch(deleteNote(data)),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>{text}</Text>
       <View style={styles.actionIconStyle}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => confirmUpdateNote(id)}>
           <Ionicons style={styles.updateIconStyle} name={`${prefix}-brush`} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => comfirmDeleteNote(id)}>
           <Ionicons style={styles.deleteIconStyle} name={`${prefix}-close`} />
         </TouchableOpacity>
       </View>
