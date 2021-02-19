@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { parseError } from "../actions";
 
 const Error = ({ errorMessage, parseError }) => {
+  const dispatch = useDispatch();
   const [error, setError] = useState(errorMessage);
+  const errorMessage = useSelector((state) => state.error.message);
 
   useEffect(() => {
     if (errorMessage != "") {
@@ -15,7 +17,7 @@ const Error = ({ errorMessage, parseError }) => {
   const refreshErrorMessage = () => {
     if (errorMessage != "") {
       setError("");
-      parseError("");
+      dispatch(parseError(""));
     }
   };
 
@@ -41,17 +43,7 @@ const Error = ({ errorMessage, parseError }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    errorMessage: state.error.message,
-  };
-};
-
-const mapDispatchToProps = {
-  parseError,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Error);
+export default Error;
 
 const styles = StyleSheet.create({
   container: {

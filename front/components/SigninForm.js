@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -17,6 +17,7 @@ import { signinUser } from "../actions";
 const { width } = Dimensions.get("window");
 
 const SigninForm = (props) => {
+  const dispatch = useDispatch();
   const { control, handleSubmit, errors } = useForm();
   const { container, inputStyle, buttonStyle, errorInput, eyeStyle } = styles;
   const { signinUser } = props;
@@ -27,7 +28,7 @@ const SigninForm = (props) => {
   };
 
   const onSubmit = (data) => {
-    signinUser(data);
+    dispatch(signinUser(data));
   };
 
   return (
@@ -82,11 +83,7 @@ const SigninForm = (props) => {
   );
 };
 
-const mapDispatchToProps = {
-  signinUser,
-};
-
-export default connect(null, mapDispatchToProps)(SigninForm);
+export default SigninForm;
 
 const styles = StyleSheet.create({
   inputStyle: {

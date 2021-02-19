@@ -1,14 +1,15 @@
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import logoutImage from "../assets/images/functions/logout.png";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout } from "../actions";
 
-const Logout = ({ logout }) => {
+const Logout = () => {
+  const dispatch = useDispatch();
   const { container, imageStyle } = styles;
 
   const onLogout = () => {
-    logout();
+    dispatch(logout());
   };
 
   return (
@@ -18,11 +19,7 @@ const Logout = ({ logout }) => {
   );
 };
 
-const mapDispatchToProps = {
-  logout,
-};
-
-export default connect(undefined, mapDispatchToProps)(Logout);
+export default Logout;
 
 const styles = StyleSheet.create({
   container: {

@@ -23,8 +23,8 @@ const OpponentList = ({
     setShowOpponentListInput(false);
   };
 
-  const setShowOpponentListInput = (value) => {
-    getShowOpponentListInput(value);
+  const setShowOpponentListInput = () => {
+    getShowOpponentListInput(false);
   };
 
   return (
@@ -44,7 +44,7 @@ const OpponentList = ({
         )}
         keyExtractor={(item) => item._id.toString()}
       />
-      <TouchableOpacity onPress={() => setShowOpponentListInput(false)}>
+      <TouchableOpacity onPress={setShowOpponentListInput}>
         <Image style={styles.closeIconStyle} source={closeIcon} />
       </TouchableOpacity>
     </View>

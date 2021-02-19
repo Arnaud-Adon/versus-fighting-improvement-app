@@ -9,7 +9,6 @@ import { getUserInformations } from "../selectors";
 
 const Note = ({ id, text }) => {
   const dispatch = useDispatch();
-
   const user = useSelector((state) => getUserInformations(state));
 
   const confirmUpdateNote = (noteId) => {

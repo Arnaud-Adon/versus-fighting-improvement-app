@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   FlatList,
@@ -13,12 +13,14 @@ import Character from "./Character";
 
 const { width } = Dimensions.get("window");
 
-const CharacterList = ({ getSkills, getCharacters, characters }) => {
+const CharacterList = ({ getSkills }) => {
+  const dispatch = useDispatch();
   const { container, nameCharacterStyle } = styles;
   const [nameCharacter, setNameCharacter] = useState("");
+  const characters = useSelector((state) => state.characters.charactersList);
 
   useEffect(() => {
-    getCharacters();
+    dispatch(getCharacters());
   }, []);
 
   useEffect(() => {
@@ -49,17 +51,7 @@ const CharacterList = ({ getSkills, getCharacters, characters }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    characters: state.characters.charactersList,
-  };
-};
-
-const mapDispatchToProps = {
-  getCharacters,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CharacterList);
+export default CharacterList;
 
 const styles = StyleSheet.create({
   nameCharacterStyle: {
