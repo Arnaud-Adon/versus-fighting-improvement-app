@@ -4,17 +4,90 @@ import { SERVER_URL } from "../utils/helper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as RootNavigation from "../utils/rootNavigation";
 
-export const signupUser = (data) => async (dispatch) => {
+export const authentification = (value) => {
+  return {
+    type: types.SIGN_UP,
+    payload: value,
+  };
+};
+
+export const getUser = (user) => {
+  return {
+    type: types.GET_USER,
+    payload: user,
+  };
+};
+
+export const fetchCharacters = () => {
+  return {
+    type: types.GET_CHARACTERS,
+    payload: response.data.characters,
+  }
+}
+
+export const parseError = (error) => {
+  return {
+    type: types.GET_ERROR,
+    payload: error,
+  };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+};
+
+export const logoutUser = () => {
+  return { 
+    type: types.LOGOUT, 
+    payload: null }
+}
+
+export const getNote = (notes) => {
+  return { 
+    type: types.GET_NOTE,
+     payload: notes }
+}
+
+export const addNote = (note) => {
+  return {
+    type: types.ADD_NOTE,
+    payload: note
+  }
+}
+
+export const updateNote = (note) => {
+  return {
+    type: types.UPDATE_NOTE,
+    payload: note
+  }
+}
+
+export const deleteNote = (note) => {
+  return {
+    type: types.DELETE_NOTE,
+    payload: note
+  }
+}
+
+export const getNoteId = (noteId) => {
+  return {
+    type: types.GET_NOTE_ID,
+    payload: noteId,
+  };
+};
+
+export const signUp = (data) => async (dispatch) => {
   const SIGN_UP_URL = `${SERVER_URL}/signup`;
 
-  await Axios.post(SIGN_UP_URL, data)
-    .then((response) => {
-      AsyncStorage.setItem("token", response.data.token);
-      dispatch({ type: types.SIGN_UP, payload: true });
-      dispatch({ type: types.GET_USER, payload: response.data.user });
-      RootNavigation.navigate("SelectCharacter");
-    })
-    .catch((error) => dispatch(parseError(error.response.data.message)));
+  return new Promise((onSuccess, onFail) => {
+    await Axios.post(SIGN_UP_URL, data)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      .then((response) => {
+        
+        dispatch(authentification(true));
+        dispatch(getUser(response.data.user));
+        AsyncStorage.setItem("token", JSON.stringify(response.data.token));
+        RootNavigation.navigate("SelectCharacter");
+        onSuccess()                                                                                                                                                                                                                                                                                                                                
+      })
+      .catch((error) => dispatch(parseError(error.response.data.message)));
+  })
+
 };
 
 export const signinUser = (data) => (dispatch) => {
@@ -22,9 +95,9 @@ export const signinUser = (data) => (dispatch) => {
 
   Axios.post(SIGN_IN_URL, data)
     .then((response) => {
-      AsyncStorage.setItem("token", response.data.token);
-      dispatch({ type: types.SIGN_UP, payload: true });
-      dispatch({ type: types.GET_USER, payload: response.data.user });
+      AsyncStorage.setItem("token", JSON.stringify(response.data.token) );
+      dispatch(authentification(true));
+      dispatch(getUser(response.data.user));
 
       if (response.data.user.characters.length > 0) {
         RootNavigation.navigate("Improve");
@@ -42,10 +115,7 @@ export const getCharacters = () => async (dispatch) => {
 
   await Axios.get(GET_CHARACTER_URL)
     .then((response) => {
-      dispatch({
-        type: types.GET_CHARACTERS,
-        payload: response.data.characters,
-      });
+      dispatch(fetchCharacters(response.data.characters));
     })
     .catch((error) => console.log("a error was occured", error));
 };
@@ -62,7 +132,7 @@ export const addCharacter = (userId, characterId) => async (dispatch) => {
     { headers: { Authorization: `Bearer ${token}` } }
   )
     .then((response) => {
-      dispatch({ type: types.GET_USER, payload: response.data.user });
+      dispatch(getUser(response.data.user));
       RootNavigation.navigate("Improve");
     })
     .catch((error) => {
@@ -71,20 +141,13 @@ export const addCharacter = (userId, characterId) => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-  dispatch({ type: types.LOGOUT, payload: null });
-  dispatch({ type: types.SIGN_UP, payload: false });
+  dispatch(logoutUser());
+  dispatch(authentification(false));
   await AsyncStorage.removeItem("token");
   RootNavigation.navigate("Login");
 };
 
-export const parseError = (error) => {
-  return {
-    type: types.GET_ERROR,
-    payload: error,
-  };
-};
-
-export const getNote = (data) => async (dispatch) => {
+export const getUserNote = (data) => async (dispatch) => {
   const GET_CHARACTER_NOTE_URL = `${SERVER_URL}/get-note`;
   const token = await AsyncStorage.getItem("token");
 
@@ -96,12 +159,12 @@ export const getNote = (data) => async (dispatch) => {
     }
   )
     .then((response) => {
-      dispatch({ type: types.GET_NOTE, payload: response.data.notes });
+      dispatch(getNote(response.data.notes));
     })
     .catch((error) => dispatch(parseError(error.response.data.message)));
 };
 
-export const addNote = (data) => async (dispatch) => {
+export const addUserNote = (data) => async (dispatch) => {
   const ADD_NOT_URL = `${SERVER_URL}/add-note`;
   const token = await AsyncStorage.getItem("token");
 
@@ -113,14 +176,14 @@ export const addNote = (data) => async (dispatch) => {
     }
   )
     .then((response) => {
-      dispatch({ type: types.ADD_NOTE, payload: response.data.note });
+      dispatch(addNote(response.data.note));
     })
     .catch((error) => {
       dispatch(parseError(error.response.data.message));
     });
 };
 
-export const updateNote = (data) => async (dispatch) => {
+export const updateUserNote = (data) => async (dispatch) => {
   const UPDATE_NOTE_URL = `${SERVER_URL}/update-note`;
   const token = await AsyncStorage.getItem("token");
 
@@ -130,12 +193,12 @@ export const updateNote = (data) => async (dispatch) => {
     { headers: { Authorization: `Bearer ${token}` } }
   )
     .then((response) =>
-      dispatch({ type: types.UPDATE_NOTE, payload: response.data.note })
+      dispatch(updateNote(response.data.note))
     )
     .catch((error) => dispatch(parseError(error.response.data.message)));
 };
 
-export const deleteNote = (data) => async (dispatch) => {
+export const deleteUserNote = (data) => async (dispatch) => {
   const DELETE_NOTE_URL = `${SERVER_URL}/delete-note`;
   const token = await AsyncStorage.getItem("token");
 
@@ -145,14 +208,9 @@ export const deleteNote = (data) => async (dispatch) => {
     { headers: { Authorization: `Bearer ${token}` } }
   )
     .then((response) => {
-      dispatch({ type: types.DELETE_NOTE, payload: response.data.note });
+      dispatch(deleteNote(response.data.note));
     })
     .catch((error) => dispatch(parseError(error.response.data.message)));
 };
 
-export const getNoteId = (noteId) => {
-  return {
-    type: types.GET_NOTE_ID,
-    payload: noteId,
-  };
-};
+
