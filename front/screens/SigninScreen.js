@@ -1,18 +1,11 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import SigninForm from "../components/SigninForm";
-import GoogleAuthForm from "../components/GoogleAuthForm";
-import Error from "../components/Error";
+import SigninForm from "../components/Sign/SigninForm";
+import GoogleAuthForm from "../components/Sign/GoogleAuthForm";
+import Error from "../components/Error/Error";
 
 const SigninScreen = () => {
   const { container, titleStyle } = styles;
-
-  // useEffect(() => {
-  //   if (isLogged) {
-  //     navigation.navigate("SelectCharacter");
-  //   }
-  // });
 
   return (
     <View style={container}>
@@ -24,13 +17,7 @@ const SigninScreen = () => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isLogged: state.authentification.isLogged,
-  };
-};
-
-export default connect(mapStateToProps, undefined)(SigninScreen);
+export default SigninScreen;
 
 const styles = StyleSheet.create({
   container: {
