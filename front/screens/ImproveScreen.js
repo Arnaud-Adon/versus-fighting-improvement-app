@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import OpponentList from "../components/OpponentList";
-import UserCharacter from "../components/UserCharacter";
-import UserInfo from "../components/UserInfo";
+import OpponentCharacterList from "../components/Character/OpponentCharacterList";
+import UserCharacter from "../components/Character/UserCharacter";
+import UserInfo from "../components/User/UserInfo";
 import {
   getUserInformations,
   getByLastUpdateUserCharacter,
   getCharacterList,
   getCharacterNotes,
   getNoteSelected,
-} from "../selectors";
+} from "../lib/state/selectors";
 import versusLogo from "../assets/images/screen/vs.png";
-import OpponentCharacter from "../components/OpponentCharacter";
-import OpponentNote from "../components/OpponentNote";
-import AddNote from "../components/AddNote";
-import { getNote } from "../actions";
-import Loading from "../components/Loading";
-import UpdateNote from "../components/UpdateNote";
+import OpponentCharacter from "../components/Character/OpponentCharacter";
+import OpponentNote from "../components/Note/OpponentNote";
+import AddNote from "../components/Note/AddNote";
+import { getNote } from "../lib/state/actions";
+import Loading from "../components/Loading/Loading";
+import UpdateNote from "../components/Note/UpdateNote";
 
 const initialState = {
   userCharacterSelected: "",
@@ -124,7 +124,7 @@ export default function ImproveScreen(props) {
           getShowOpponentListInput={getShowOpponentListInput}
         />
         {showOpponentList && (
-          <OpponentList
+          <OpponentCharacterList
             charactersList={charactersList}
             getShowOpponentListInput={getShowOpponentListInput}
             getOpponentIdSelected={getOpponentIdSelected}

@@ -1,13 +1,10 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { Provider } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createStore, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
-import reducers from "./reducers";
-import { getCharacters } from "./actions";
-import thunk from "redux-thunk";
+import "@react-native-async-storage/async-storage";
+
 import LoginScreen from "./screens/LoginScreen";
 import ImproveScreen from "./screens/ImproveScreen";
 import SignupScreen from "./screens/SignupScreen";
@@ -15,15 +12,16 @@ import SigninScreen from "./screens/SigninScreen";
 import StatScreen from "./screens/StatScreen";
 import VideoScreen from "./screens/VideoScreen";
 import SettingScreen from "./screens/SettingScreen";
-import { prefix, renderInitialScreen, loadConfiguration } from "./utils/helper";
-import Loading from "./components/Loading";
-import Logout from "./components/Logout";
-import { navigationRef } from "./utils/rootNavigation";
 import SelectCharacterScreen from "./screens/SelectCharacterScreen";
+import Loading from "./components/Loading/Loading";
+import Logout from "./components/Sign/Logout";
+
+import { PREFIX } from "./lib/utils/helper/contants";
+import { navigationRef } from "./lib/utils/navigation/rootNavigation";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "react-native";
-
-const store = createStore(reducers, applyMiddleware(thunk));
+import { store } from "./lib/state/store";
+import useSetting from "./lib/hooks/useSetting";
 
 const Stack = createStackNavigator();
 
@@ -39,17 +37,17 @@ const ImproveTabsScreen = () => {
           switch (route.name) {
             case "Improve":
               iconName = focused
-                ? `${prefix}-paper-plane`
-                : `${prefix}-paper-plane`;
+                ? `${PREFIX}-paper-plane`
+                : `${PREFIX}-paper-plane`;
               break;
             case "Stat":
-              iconName = focused ? `${prefix}-stats` : `${prefix}-stats`;
+              iconName = focused ? `${PREFIX}-stats` : `${PREFIX}-stats`;
               break;
             case "Video":
-              iconName = focused ? `${prefix}-videocam` : `${prefix}-videocam`;
+              iconName = focused ? `${PREFIX}-videocam` : `${PREFIX}-videocam`;
               break;
             case "Setting":
-              iconName = focused ? `${prefix}-options` : `${prefix}-options`;
+              iconName = focused ? `${PREFIX}-options` : `${PREFIX}-options`;
               break;
           }
 
@@ -67,34 +65,11 @@ const ImproveTabsScreen = () => {
 };
 
 export default function App() {
-  const [initialScreen, setInitialScreen] = useState("Login");
-  const [loading, setLoading] = useState(true);
-
-  const load = () => {
-    try {
-      setTimeout(() => {
-        loadConfiguration();
-        store.dispatch(getCharacters());
-        setLoading(false);
-      }, 2000);
-    } catch (error) {
-      // Store error with message
-    }
-  };
+  const { initialScreen, loading, load } = useSetting();
 
   useEffect(() => {
-    // setInitialScreen(renderInitialScreen());
     load();
   }, []);
-
-  // setInterval(() => {
-  //   if (store.getState().characters.charactersList.length === 0) {
-  //     store.dispatch(getCharacters());
-  //     console.log("les personnage ont été ajoutés");
-  //   } else {
-  //     console.log("les personnage ont déjà été ajoutés");
-  //   }
-  // }, 500);
 
   if (loading) {
     return <Loading />;
@@ -132,12 +107,12 @@ export default function App() {
           >
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="Signin" component={SigninScreen} />
-            <Stack.Screen
+            {/* <Stack.Screen name="Signin" component={SigninScreen} /> */}
+            {/* <Stack.Screen
               name="SelectCharacter"
               component={SelectCharacterScreen}
-            />
-            <Stack.Screen name="Improve" component={ImproveTabsScreen} />
+            /> */}
+            {/* <Stack.Screen name="Improve" component={ImproveTabsScreen} /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

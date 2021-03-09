@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -7,22 +7,22 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import CharacterList from "../components/CharacterList";
-import Skill from "../components/Skill";
-import { addCharacter } from "../actions";
+import CharacterList from "../components/Character/CharacterList";
+import Skill from "../components/Character/Skill";
+import { addCharacter } from "../lib/state/actions";
 import PropTypes from "prop-types";
 
 const { width } = Dimensions.get("window");
 
-const SelectCharacterScreen = ({
-  characters,
-  user,
-  addCharacter,
-  navigation,
-}) => {
+const SelectCharacterScreen = ({ addCharacter, navigation }) => {
+  const dispatch = useDispatch();
   const { container, titleStyle, buttonStyle } = styles;
   const [caracterId, setCharacterId] = useState(null);
   const [skills, setSkills] = useState("");
+  const { charactersList: characters } = useSelector(
+    (state) => state.characters
+  );
+  const { informations: user } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (characters.length > 0 && !caracterId && !skills) {
@@ -37,7 +37,8 @@ const SelectCharacterScreen = ({
   };
 
   const submitCharacter = () => {
-    addCharacter(user._id, caracterId);
+    const data = { userId: user._id, caracterId };
+    dispatch(addCharacter(data));
   };
 
   return (
@@ -48,19 +49,9 @@ const SelectCharacterScreen = ({
       <TouchableOpacity onPress={submitCharacter}>
         <Text style={buttonStyle}>Valider</Text>
       </TouchableOpacity>
+      <Text>SelectCharacterScreen</Text>
     </View>
   );
-};
-
-const mapStateToProps = (state) => {
-  return {
-    characters: state.characters.charactersList,
-    user: state.user.informations,
-  };
-};
-
-const mapDispatchToProps = {
-  addCharacter,
 };
 
 SelectCharacterScreen.propTypes = {
@@ -69,10 +60,7 @@ SelectCharacterScreen.propTypes = {
   navigation: PropTypes.object.isRequired,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SelectCharacterScreen);
+export default SelectCharacterScreen;
 
 const styles = StyleSheet.create({
   container: {

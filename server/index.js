@@ -6,17 +6,18 @@ const config = require("./config");
 const databaseConnexion = require("./services/connexion");
 const routes = require("./routes");
 const cors = require("cors");
-var app = express();
+const app = express();
+const routeApi = express.Router();
+app.use("/api", routeApi);
 
-app.use(bodyParser.json({ type: "*/*" }));
+routeApi.use(bodyParser.json({ type: "*/*" }));
+routeApi.use(cors());
+routeApi.use(morgan("common"));
 
 databaseConnexion();
 
-app.use(cors());
-app.use(morgan("common"));
-
+routes(routeApi);
 const server = http.createServer(app);
-routes(app);
 server.listen(config.port, function () {
   console.log(`Server listen on port ${config.port}`);
 });
