@@ -33,7 +33,7 @@ Serveur
 - Node Js: v14.11.0
   - Routing : ExpressJs
   - Database : 
-    - Cluster MongoDB Atlas - AWS
+  - Cluster MongoDB Atlas - AWS
   - Authentification : Passport JS
   - Relationnel: Mongoose
   
