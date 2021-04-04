@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { countries } from "../../lib/utils/country/countriesList";
 import { register } from "../../lib/state/actions";
 import { PREFIX } from "../../lib/utils/helper/contants";
+import { useEffect, useState } from "react/cjs/react.development";
+import { useForm } from "../../lib/hooks/useForm";
 
 const { width } = Dimensions.get("window");
 
@@ -34,6 +36,7 @@ const SignupForm = () => {
     title,
     buttonStyle,
     inputStyle,
+    birthday_container,
     dateStyle,
     countryStyle,
     errorInput,
@@ -41,20 +44,36 @@ const SignupForm = () => {
   } = styles;
 
   const dispatch = useDispatch();
+  const {
+    formValues,
+    errors,
+    secure,
+    setSecure,
+    isValid,
+    handleChange,
+    validate,
+  } = useForm(defaultValues);
 
   const showPassword = () => {
     setSecure(!secure);
   };
 
-  const onSubmit = (data) => {
-    if (!data.birthdayDate) {
-      data.birthdayDate = date;
-    }
-    if (!data.country) {
-      data.country = country;
-    }
-    dispatch(register(data));
+  const onSubmit = () => {
+    // dispatch(register());
   };
+
+  useEffect(() => {
+    // console.log("validate");
+    validate();
+  }, [formValues]);
+
+  //   useEffect(() => {
+  //     //   validate(defaultValues);
+  //   }, []);
+
+  // console.log("errors", errors);
+  // console.log("formValues", formValues);
+  // console.log("isValid", isValid);
 
   return (
     <ScrollView>
@@ -64,141 +83,129 @@ const SignupForm = () => {
           <Text>Pseudo:</Text>
           <TextInput
             style={inputStyle}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-            name="pseudo"
+            onChangeText={(value) => handleChange("pseudo", value)}
+            testID="pseudo-input"
           />
 
           {errors.username && (
-            <Text style={errorInput}>Votre pseudo est requis.</Text>
+            <Text style={errorInput} testID="error">
+              Votre pseudo est requis.
+            </Text>
           )}
         </View>
 
         <View>
           <Text>email:</Text>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                style={inputStyle}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-              />
-            )}
-            name="email"
-            rules={{ required: true }}
-            defaultValue=""
+
+          <TextInput
+            style={inputStyle}
+            onChangeText={(value) => handleChange("email", value)}
+            testID="email-input"
           />
           {errors.email && (
-            <Text style={errorInput}>Votre email est requis.</Text>
+            <Text style={errorInput} testID="error">
+              Votre email est requis.
+            </Text>
           )}
         </View>
 
-        <View style={dateStyle}>
+        <View style={birthday_container}>
           <Text>Date de naissance:</Text>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={"date"}
-                is24Hour={true}
-                display="clock"
-                onChange={(event, selectedDate) => {
-                  onChange(setDate(selectedDate));
-                }}
-              />
-            )}
-            name="birthdayDate"
-            defaultValue={date}
+          <DateTimePicker
+            style={dateStyle}
+            testID="dateTimePicker"
+            mode={"date"}
+            is24Hour={true}
+            display="clock"
+            onChange={(event, value) => handleChange("birthdayDate", value)}
+            value={formValues.birthdayDate ?? defaultValues.birthdayDate}
+            testID="birthday-input"
           />
         </View>
 
         <View style={countryStyle}>
           <Text>Votre pays:</Text>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <PickerIOS
-                selectedValue={country}
-                style={{ height: 200, width: 100, color: "#000" }}
-                onValueChange={(itemValue, itemIndex) =>
-                  onChange(setCountry(itemValue))
-                }
-                mode={"dialog"}
-              >
-                {countries.length > 0 &&
-                  countries.map((country, index) => {
-                    const { name } = country;
-                    return (
-                      <PickerIOS.Item key={index} label={name} value={name} />
-                    );
-                  })}
-              </PickerIOS>
-            )}
-            name="country"
-            defaultValue={country}
-          />
+          {PREFIX === "ios" ? (
+            <PickerIOS
+              selectedValue={formValues.country ?? defaultValues.country}
+              style={{ height: 200, width: 100, color: "#000" }}
+              onValueChange={(itemValue, itemIndex) =>
+                handleChange("country", itemValue)
+              }
+              mode={"dialog"}
+              testID="country-input"
+            >
+              {countries.length > 0 &&
+                countries.map((country, index) => {
+                  const { name } = country;
+                  return (
+                    <PickerIOS.Item key={index} label={name} value={name} />
+                  );
+                })}
+            </PickerIOS>
+          ) : (
+            <Picker
+              selectedValue={formValues.country ?? defaultValues.country}
+              style={{ height: 200, width: 100, color: "#000" }}
+              onValueChange={(itemValue, itemIndex) =>
+                handleChange("country", itemValue)
+              }
+              mode={"dialog"}
+              testID="country-input"
+            >
+              {countries.length > 0 &&
+                countries.map((country, index) => {
+                  const { name } = country;
+                  return (
+                    <PickerIOS.Item key={index} label={name} value={name} />
+                  );
+                })}
+            </Picker>
+          )}
         </View>
 
         <View>
           <Text>Mot de passe:</Text>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <View>
-                <TextInput
-                  style={inputStyle}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  secureTextEntry={secure}
-                  value={value}
-                />
-                <TouchableNativeFeedback onPress={showPassword}>
-                  <Ionicons style={eyeStyle} name={`${PREFIX}-eye`} />
-                </TouchableNativeFeedback>
-              </View>
-            )}
-            name="password"
-            rules={{ required: true }}
-            defaultValue=""
-          />
+          <View>
+            <TextInput
+              style={inputStyle}
+              onChangeText={(value) => handleChange("password", value)}
+              secureTextEntry={secure}
+              testID="password-input"
+            />
+            <TouchableNativeFeedback onPress={showPassword}>
+              <Ionicons style={eyeStyle} name={`${PREFIX}-eye`} />
+            </TouchableNativeFeedback>
+          </View>
           {errors.password && (
-            <Text style={errorInput}>Veuillez choisir un mot de passe.</Text>
+            <Text style={errorInput} testID="error">
+              Veuillez choisir un mot de passe.
+            </Text>
           )}
         </View>
 
         <View>
           <Text>Confirmation mot de passe:</Text>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <View>
-                <TextInput
-                  style={inputStyle}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  secureTextEntry={secure}
-                  value={value}
-                />
-                <TouchableNativeFeedback onPress={showPassword}>
-                  <Ionicons style={eyeStyle} name={`${PREFIX}-eye`} />
-                </TouchableNativeFeedback>
-              </View>
-            )}
-            name="confirmPassword"
-            rules={{ required: true }}
-            defaultValue=""
-          />
+          <View>
+            <TextInput
+              style={inputStyle}
+              onChangeText={(value) => handleChange("comfirmPassword", value)}
+              secureTextEntry={secure}
+              testID="confirmPassword-input"
+            />
+            <TouchableNativeFeedback onPress={showPassword}>
+              <Ionicons style={eyeStyle} name={`${PREFIX}-eye`} />
+            </TouchableNativeFeedback>
+          </View>
           {errors.confirmPassword && (
-            <Text style={errorInput}>Veuillez choisir un mot de passe.</Text>
+            <Text style={errorInput} testID="error">
+              Veuillez choisir un mot de passe.
+            </Text>
           )}
         </View>
 
         <TouchableOpacity>
-          <Text style={buttonStyle} onPress={handleSubmit(onSubmit)}>
+          <Text style={buttonStyle} onPress={onSubmit} testID="submit-button">
             Valider
           </Text>
         </TouchableOpacity>
@@ -222,6 +229,8 @@ const styles = StyleSheet.create({
     lineHeight: 30,
   },
   inputStyle: {
+    marginTop: 10,
+    marginBottom: 10,
     borderWidth: 1,
     width: width - 80,
     height: 37,
@@ -235,9 +244,14 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     color: "#fff",
   },
+  birthday_container: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   dateStyle: {
-    width: width - 80,
-    height: "auto",
+    margin: 10,
+    width: 130,
+    height: 70,
   },
   countryStyle: {
     width: width - 80,
@@ -251,7 +265,7 @@ const styles = StyleSheet.create({
   eyeStyle: {
     position: "absolute",
     fontSize: 24,
-    top: 5,
+    top: 15,
     right: 10,
   },
 });
