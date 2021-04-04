@@ -1,18 +1,18 @@
-const AuthentificationController = require("./controllers/authentification");
-const CharacterController = require("./controllers/character");
-const UserController = require("./controllers/userController");
+const authController = require("./controllers/authentification");
+const characterController = require("./controllers/character");
+const userController = require("./controllers/user");
 const passport = require("passport");
 require("./services/passport");
 
 const requireToken = passport.authenticate("jwt", { session: false });
 
 module.exports = function (app) {
-  app.post("/signup", AuthentificationController.signup);
-  app.post("/signin", AuthentificationController.signin);
-  app.get("/characters", CharacterController.getCharacters);
-  app.post("/add-character", requireToken, UserController.addCharacter);
-  app.post("/get-note", requireToken, UserController.getNote);
-  app.post("/add-note", requireToken, UserController.addNote);
-  app.post("/update-note", requireToken, UserController.updateNote);
-  app.post("/delete-note", requireToken, UserController.deleteNote);
+  app.post("/signup", authController.signup);
+  app.post("/signin", authController.signin);
+  app.get("/characters", characterController.getCharacters);
+  app.post("/add-character", requireToken, userController.addCharacter);
+  app.post("/get-note", requireToken, userController.getNote);
+  app.post("/add-note", requireToken, userController.addNote);
+  app.post("/update-note", requireToken, userController.updateNote);
+  app.post("/delete-note", requireToken, userController.deleteNote);
 };
