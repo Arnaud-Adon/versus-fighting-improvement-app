@@ -1,9 +1,9 @@
-## versus-fighting-improvement-app
+## versus-fighting-improvement-app :iphone:
 
 - Contributor: Arnaud-Adon
 - version: 1.0
 - status: En cours
-- Raisons: Grand amateur de jeu de combat, j'ai voulu me développer un outils me permettant de progressé sur un titre, qu'il soit facilement accéssible, d'où le choix porté sur mobile
+- Raisons: :video_game: Grand amateur de jeu de combat, j'ai voulu me développer un outils me permettant de progressé sur un titre, qu'il soit facilement accéssible, d'où le choix porté sur mobile
 
 ## Description
 Une application mobile composé de notes par personnage, pour permettre de s'améliorer sur un jeu de combat, pour le moment centralisé sur le jeu de combat Street Fighter 5
@@ -13,15 +13,9 @@ Une application mobile composé de notes par personnage, pour permettre de s'am�
 - Statistiques globales: nombres de matchs effectués, ratio, etc...
 - videos youtube en relation avec le personnage sélectionné
 
-Exemple de mockups créer sur Sketch
+<img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561707-78522380-d042-11eb-8398-36245987a114.png"> <img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561828-99b30f80-d042-11eb-9877-3ac6d2833b2c.png">
 
-<img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561707-78522380-d042-11eb-8398-36245987a114.png">
-
-<img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561828-99b30f80-d042-11eb-9877-3ac6d2833b2c.png">
-
-<img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561901-b0f1fd00-d042-11eb-8c03-11eb392bac2c.png">
-
-<img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561984-c9faae00-d042-11eb-9148-c99324f8dab9.png">
+<img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561901-b0f1fd00-d042-11eb-8c03-11eb392bac2c.png"> <img width="396" alt="ImprovePage" src="https://user-images.githubusercontent.com/17828383/122561984-c9faae00-d042-11eb-9148-c99324f8dab9.png">
 
 
 ## Stack Technique
